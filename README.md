@@ -139,3 +139,131 @@ Sutvarkius duomenys gaunami tokie rezultatai:
 | 50%   | 56.000000   | 10651148.0 | 4316632.00 | 6512379.00  | 0.150000   |
 | 75%   | 125.500000  | 13096431.0 | 5814274.00 | 9293752.50  | 0.200000   |
 | max   | 7125.000000 | 21810052.0 | 9860686.00 | 19624534.00 | 0.300000   |
+
+## Taškų atsiskyrėlių arba išskirčių identifikavimas ir išmetimas
+
+Buvo pasirinkta šalinti Employees, Revenue, Expenses, Profit, Growth ekstremalius atsiskyrėlius
+Buvo panaudotas toks pats kodas visiems šiems elementams, vaizduojamas su Revenue pavyzdžiu:
+```python
+q_low = data["Revenue"].quantile(0.25)
+q_hi = data["Revenue"].quantile(0.75)
+q_dif = 3 * (q_hi - q_low)
+q_dif = 3 * (q_hi - q_low)
+df_filtered = data[(data["Revenue"] > (q_low - q_dif)) &
+                   (data["Revenue"] < (q_hi + q_dif))]
+
+s1 = pd.merge(data, df_filtered, how='inner')
+```
+### Šalinamų elementų kiekis:
+Employees: 36  
+Revenue: 0  
+Expenses: 0  
+Profit: 0  
+Growth: 0  
+
+Employees turėjo daugiausia atsiskyrėlių, tai gali indikuoti, kad per daug mažas koeficientas barjero. Taip pat kadangi nagrinėjamos Fortune 500 kompanijos viršutinė ribą gali būti padidinta, nes nagrinėjamos didžiausio įmonės. Todėl employees turėtų būti nagrinėjamas papildomai.
+
+## Duomenų normavimas
+
+### Min-Max Normavimas
+
+Min-Max normavimas buvo atliktas naudojant sklearn.preprocessing 
+
+```python
+scaler = MinMaxScaler()
+minmax_scaled = s1.copy()
+minmax_scaled[["Revenue", "Expenses", "Profit", "Growth", "Employees"]] = scaler.fit_transform(
+    s1[["Revenue", "Expenses", "Profit", "Growth", "Employees"]])
+```
+
+ir gauti rezultatai:
+
+|       | Employees  | Revenue    | Expenses   | Profit     | Growth     |
+|-------|------------|------------|------------|------------|------------|
+| count | 459.000000 | 459.000000 | 459.000000 | 459.000000 | 459.000000 |
+| mean  | 0.199027   | 0.453909   | 0.439685   | 0.356515   | 0.531458   |
+| std   | 0.205348   | 0.157664   | 0.214205   | 0.209048   | 0.209382   |
+| min   | 0.000000   | 0.000000   | 0.000000   | 0.000000   | 0.000000   |
+| 25%   | 0.062189   | 0.343678   | 0.283465   | 0.179506   | 0.333333   |
+| 50%   | 0.121891   | 0.445237   | 0.440128   | 0.357079   | 0.575758   |
+| 75%   | 0.253731   | 0.564660   | 0.596619   | 0.508046   | 0.696970   |
+| max   | 1.000000   | 1.000000   | 1.000000   | 1.000000   | 1.000000   |
+
+### Normavimas pagal vidurkį ir dispersiją
+
+```python
+x = s1.loc[:, scl_names].values
+x = StandardScaler().fit_transform(x) 
+
+act_data = s1[["Revenue", "Expenses", "Profit", "Growth", "Employees"]]
+mapper = DataFrameMapper([(act_data.columns, StandardScaler())])
+
+scaled_features = mapper.fit_transform(act_data.copy(), 4)
+scaled_features_df = pd.DataFrame(
+    scaled_features, index=act_data.index, columns=act_data.columns)
+std_scaled = s1.copy()
+std_scaled[["Revenue", "Expenses", "Profit", "Growth", "Employees"]] = 
+    scaled_features_df[["Revenue", "Expenses", "Profit", "Growth", "Employees"]]
+
+```
+
+ir gauti rezultatai:
+
+|       | Employees     | Revenue       | Expenses      | Profit        | Growth        |
+|-------|---------------|---------------|---------------|---------------|---------------|
+| count | 4.590000e+02  | 4.590000e+02  | 4.590000e+02  | 4.590000e+02  | 4.590000e+02  |
+| mean  | 7.272027e-09  | -4.155444e-09 | -4.155444e-09 | -1.662177e-08 | 6.233166e-09  |
+| std   | 1.001091e+00  | 1.001091e+00  | 1.001091e+00  | 1.001091e+00  | 1.001091e+00  |
+| min   | -9.702740e-01 | -2.882099e+00 | -2.054878e+00 | -1.707284e+00 | -2.540996e+00 |
+| 25%   | -6.670964e-01 | -6.999158e-01 | -7.300987e-01 | -8.476647e-01 | -9.472709e-01 |
+| 50%   | -3.760459e-01 | -5.506565e-02 | 2.072976e-03  | 2.703224e-03  | 2.118023e-01  |
+| 75%   | 2.666906e-01  | 7.032116e-01  | 7.334369e-01  | 7.256549e-01  | 7.913389e-01  |
+| max   | 3.904822e+00  | 3.467409e+00  | 2.618649e+00  | 3.081531e+00  | 2.240180e+00  |
+
+
+
+## Vizualizacijos
+
+### Bendri grafikai
+
+#### Darbuotojų kiekis pagal Industry ir State 
+
+![foo](/gfx/frequency/General_Industry.png)
+![foo](/gfx/frequency/General_State.png)
+
+Šiuose grafikuose galime matyt, jog daugiausiai Employees yra IT Services Industry ir CA State, tai yra tikriausiai dėl Silicon valley.
+
+#### Kiekybinių priklausomybė
+![foo](/gfx/scatter/General_Profit_Employees.png)
+
+Iš šio grafiko galime matyti, jog Profit nepriklauso nuo Employees, nes net ir nedaug darbuotojų turinčios įmonės turi aukštą profit.
+
+![foo](/gfx/scatter/General_Revenue_Profit.png)
+
+Iš šio grafiko galime matyti, jog Profit nepriklauso nuo Employees, nes net ir nedaug darbuotojų turinčios įmonės turi aukštą profit.
+
+### Min-Max normuoti grafikai
+
+#### Pagal Industry
+
+![foo](/gfx/bar/MinMax_Industry_Employees.png)
+
+Matome kad industrijos Employees maksimumus yra pakankamai panašus.
+
+![foo](/gfx/bar/MinMax_Industry_Profit.png)
+![foo](/gfx/bar/MinMax_Industry_Revenue.png)
+
+Industry Profit ir Revenue maksimumus dominuoja IT Services.
+
+###
+
+#### Pagal Industry
+
+![foo](/gfx/bar/MinMax_Industry_Employees.png)
+
+Matome kad industrijos Employees maksimumus yra pakankamai panašus.
+
+![foo](/gfx/bar/MinMax_Industry_Profit.png)
+![foo](/gfx/bar/MinMax_Industry_Revenue.png)
+
+Industry Profit ir Revenue maksimumus dominuoja IT Services.
