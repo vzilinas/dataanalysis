@@ -1,7 +1,8 @@
 # Duomenų tyrybos praktinė užduotis
+Darbą atliko: Vytautas Žilinas (Magistro 1 kurso studentas)
 ## Įžanga
 Šiame darbe nagrinėjamas Future-500-17.csv. 
-Duomenų aibei nagrinėti naudojamas Python 3.8
+Duomenų aibei nagrinėti naudojamas Python 3.8  
 **Užduoties tikslas** – išanalizuoti duotų duomenų aibę, atlikti pirminį duomenų apdorojimą: užpildyti praleistus duomenis, išskirti taškus atsiskyrėlius, pritaikyti kelis normavimo metodus, pateikti aprašomąsias duomenų statistikas. Atlikti tiriamos aibės vizualią analizę, naudojant taškines, stačiakampes diagramas, histogramas, dimensijos mažinimo algoritmus.
 
 **Uždaviniai**:
@@ -34,7 +35,7 @@ Duomenų aibei nagrinėti naudojamas Python 3.8
 
 ## Duomenų priešanalizė
 
-Neapdorotu duomenis analizuojant su Python priedu Pandas 
+Neapdorotus duomenis analizuojant su Python priedu Pandas 
 
 ```python
 data = pd.read_csv("Future-500-17.csv")
@@ -42,7 +43,7 @@ print(data.describe(include='all'))
 ``` 
 
 |        | ID         | Name | Industry | Inception   | Employees   | State | City | Revenue | Expenses | Profit       | Growth |
-|--------|------------|------|----------|-------------|-------------|-------|------|---------|----------|--------------|--------|
+| ------ | ---------- | ---- | -------- | ----------- | ----------- | ----- | ---- | ------- | -------- | ------------ | ------ |
 | count  | 500.000000 | 500  | 497      | 499.000000  | 495.000000  | 495   | 500  | 493     | 495      | 4.970000e+02 | 497    |
 | unique | NaN        | 500  | 7        | NaN         | NaN         | 42    | 297  | 493     | 495      | NaN          | 32     |
 | freq   | NaN        | 1    | 145      | NaN         | NaN         | 57    | 13   | 1       | 1        | NaN          | 39     |
@@ -130,7 +131,7 @@ data = data[data['Revenue'].notna() & data['Expenses'].notna()
 Sutvarkius duomenys gaunami tokie rezultatai:
 
 |       | Employees   | Revenue    | Expenses   | Profit      | Growth     |
-|-------|-------------|------------|------------|-------------|------------|
+| ----- | ----------- | ---------- | ---------- | ----------- | ---------- |
 | count | 495.000000  | 495.0      | 495.00     | 495.00      | 495.000000 |
 | mean  | 148.870712  | 10831591.0 | 4297555.50 | 6532033.00  | 0.143232   |
 | std   | 398.469299  | 3190166.5  | 2125169.75 | 3871154.25  | 0.069440   |
@@ -179,7 +180,7 @@ minmax_scaled[["Revenue", "Expenses", "Profit", "Growth", "Employees"]] = scaler
 ir gauti rezultatai:
 
 |       | Employees  | Revenue    | Expenses   | Profit     | Growth     |
-|-------|------------|------------|------------|------------|------------|
+| ----- | ---------- | ---------- | ---------- | ---------- | ---------- |
 | count | 459.000000 | 459.000000 | 459.000000 | 459.000000 | 459.000000 |
 | mean  | 0.199027   | 0.453909   | 0.439685   | 0.356515   | 0.531458   |
 | std   | 0.205348   | 0.157664   | 0.214205   | 0.209048   | 0.209382   |
@@ -210,7 +211,7 @@ std_scaled[["Revenue", "Expenses", "Profit", "Growth", "Employees"]] =
 ir gauti rezultatai:
 
 |       | Employees     | Revenue       | Expenses      | Profit        | Growth        |
-|-------|---------------|---------------|---------------|---------------|---------------|
+| ----- | ------------- | ------------- | ------------- | ------------- | ------------- |
 | count | 4.590000e+02  | 4.590000e+02  | 4.590000e+02  | 4.590000e+02  | 4.590000e+02  |
 | mean  | 7.272027e-09  | -4.155444e-09 | -4.155444e-09 | -1.662177e-08 | 6.233166e-09  |
 | std   | 1.001091e+00  | 1.001091e+00  | 1.001091e+00  | 1.001091e+00  | 1.001091e+00  |
@@ -255,18 +256,22 @@ Matome kad industrijos Employees maksimumus yra pakankamai panašus.
 
 Industry Profit ir Revenue maksimumus dominuoja IT Services.
 
-###
+#### Pagal State
+
+![foo](\gfx\bar\MinMax_State_Expenses.png)
+
+Matome kad State Expenses maksimumus yra stipriai mažesnis WV ir NV State, kas reiškia, kad ten pigiausia kurti įmonę.
+
+### Vidurkiu ir dispersija normuoti grafikai
 
 #### Pagal Industry
 
-![foo](/gfx/bar/MinMax_Industry_Employees.png)
+![foo](\gfx\bar\Scaled_Industry_Growth.png)
 
-Matome kad industrijos Employees maksimumus yra pakankamai panašus.
+Growth yra didžiausias IT services, o mažiausias Government service.
 
-![foo](/gfx/bar/MinMax_Industry_Profit.png)
-![foo](/gfx/bar/MinMax_Industry_Revenue.png)
-
-Industry Profit ir Revenue maksimumus dominuoja IT Services.
+#### Pagal State
+Nenagrinėjama, nes per mažai duomenų, kad vidurkis būtų indikatorius.
 
 ## PCA ir MDS algoritmas
 
@@ -285,23 +290,36 @@ Gautas grafikai pagal industrijas rodo pakankamai matomus klasterius
 
 ![foo](/gfx/pca/Scaled_pca_Industry.png)
 
-
 ![foo](/gfx/pca/Scaled_pca_Industry_hist.png)
 
 ## Koreliacija
 
 Koreliacija gaunama naudojant Pandas:
 
-```
+```python
 data.corr(method='pearson')
 ```
 
-|           | Employees | Revenue   | Expenses   | Profit     | Growth    |
-|-----------|-----------|-----------|------------|------------|-----------|
-| Employees | 1.000000  | -0.022411 | 0.063000   | -0.052620  | -0.083790 |
-| Revenue   | -0.022411 | 1.000000  | -0.033675  | 0.835522   | 0.448901  |
-| Expenses  | 0.063000  | -0.033675 | 1.000000   | -0.576776  | -0.250309 |
-| Profit    | -0.052620 | 0.835522  | -0.576776  | 1.000000   | 0.502986  |
-| Growth    | -0.083790 | 0.448901  | -0.250309  | 0.502986   | 1.000000  |
+|           | Employees | Revenue   | Expenses  | Profit    | Growth    |
+| --------- | --------- | --------- | --------- | --------- | --------- |
+| Employees | 1.000000  | -0.022411 | 0.063000  | -0.052620 | -0.083790 |
+| Revenue   | -0.022411 | 1.000000  | -0.033675 | 0.835522  | 0.448901  |
+| Expenses  | 0.063000  | -0.033675 | 1.000000  | -0.576776 | -0.250309 |
+| Profit    | -0.052620 | 0.835522  | -0.576776 | 1.000000  | 0.502986  |
+| Growth    | -0.083790 | 0.448901  | -0.250309 | 0.502986  | 1.000000  |
+
+Matome, kad Revenue ir Profit tikrai stipriai susiję teigiamai. Taip pat matome, kad Profit ir Expenses susiję neigiamai. 
 
 ## Išvados
+
+Darbo eigoje gaunant tarpinius rezultatus paaiškėjo tam tikri dalykai apie nagrinėjamą duomenų aibę:
+
+1. Duomenis valymu pašalinama 41 eilutė.
+2. Reikia papildomos analizės dėl darbuotojų kiekio išorinio barjero.
+3. Daugiausiai Employees yra IT Services Industry ir CA State.
+4. Profit nepriklauso nuo Employees, nes net ir nedaug darbuotojų turinčios įmonės turi aukštą pelną.
+5. Profit yra stipriai susijęs su Revenue -  kuo didesnė apyvartą tuo didesnis ir pelnas.
+6. Industry Profit ir Revenue maksimumus dominuoja IT Services.
+7. Matome kad industrijos Employees kiekių viršūnės yra panašios.
+8. WV ir NV State įsteigtos įmonės turi mažiausius Expenses.
+9. Norint turėti aukšta pelną reikia didelės apyvartos ir mažų išlaidų ir tam geriausiai tinka IT service industrija didžiausiam Revenue ir WV arba NV State mažiausiems kaštas.
