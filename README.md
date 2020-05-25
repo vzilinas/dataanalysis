@@ -240,7 +240,7 @@ Iš šio grafiko galime matyti, jog Profit nepriklauso nuo Employees, nes net ir
 
 ![foo](/gfx/scatter/General_Revenue_Profit.png)
 
-Iš šio grafiko galime matyti, jog Profit nepriklauso nuo Employees, nes net ir nedaug darbuotojų turinčios įmonės turi aukštą profit.
+Iš šio grafiko galime matyti, jog Profit yra susiję su Revenue -  kuo didesnė apyvartą tuo didesnis ir pelnas
 
 ### Min-Max normuoti grafikai
 
@@ -267,3 +267,41 @@ Matome kad industrijos Employees maksimumus yra pakankamai panašus.
 ![foo](/gfx/bar/MinMax_Industry_Revenue.png)
 
 Industry Profit ir Revenue maksimumus dominuoja IT Services.
+
+## PCA ir MDS algoritmas
+
+Daugiamačiam nagrinėjimui buvo pasirinktas PCA algoritmas naudojant sklearn.decomposition ir seaborn vizualizacijai:
+```python
+#x - Normuoti duomenys pagal vidurkį ir dispersiją kiekybiniai
+#std_scaled - normuoti visi duomenys
+pca = PCA(n_components=2)
+principalComponents = pca.fit_transform(x)
+principal_Df = pd.DataFrame(data=principalComponents, columns=['Dim1', 'Dim2'])
+principal_Df['Industry'] = std_scaled['Industry']
+sns.pairplot(x_vars=["Dim1"], y_vars=["Dim2"], data=principal_Df, hue="Industry")
+```
+
+Gautas grafikai pagal industrijas rodo pakankamai matomus klasterius
+
+![foo](/gfx/pca/Scaled_pca_Industry.png)
+
+
+![foo](/gfx/pca/Scaled_pca_Industry_hist.png)
+
+## Koreliacija
+
+Koreliacija gaunama naudojant Pandas:
+
+```
+data.corr(method='pearson')
+```
+
+|           | Employees | Revenue   | Expenses   | Profit     | Growth    |
+|-----------|-----------|-----------|------------|------------|-----------|
+| Employees | 1.000000  | -0.022411 | 0.063000   | -0.052620  | -0.083790 |
+| Revenue   | -0.022411 | 1.000000  | -0.033675  | 0.835522   | 0.448901  |
+| Expenses  | 0.063000  | -0.033675 | 1.000000   | -0.576776  | -0.250309 |
+| Profit    | -0.052620 | 0.835522  | -0.576776  | 1.000000   | 0.502986  |
+| Growth    | -0.083790 | 0.448901  | -0.250309  | 0.502986   | 1.000000  |
+
+## Išvados

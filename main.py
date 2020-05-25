@@ -163,59 +163,60 @@ std_scaled[["Revenue", "Expenses", "Profit", "Growth", "Employees"]
 print("\nStandard scaled\n")
 print(std_scaled.describe())
 
-# PCA
+# PCA scatter
 pca = PCA(n_components=2)
 principalComponents = pca.fit_transform(x)
 principal_Df = pd.DataFrame(data=principalComponents, columns=['Dim1', 'Dim2'])
 principal_Df['Industry'] = std_scaled['Industry']
-# sns.pairplot(x_vars=["Dim1"], y_vars=["Dim2"], data=principal_Df, hue="Industry")
-# plt.savefig('gfx/pca/Scaled_pca_Industry.png')
+sns.pairplot(x_vars=["Dim1"], y_vars=["Dim2"], data=principal_Df, hue="Industry")
+plt.savefig('gfx/pca/Scaled_pca_Industry.png')
+plt.clf()
+
+# PCA histogram
 plt.title('PCA')
 plt.hist2d(principal_Df['Dim1'], principal_Df['Dim2'])
+plt.xlabel("Dim1")
+plt.ylabel("Dim2")
 plt.colorbar()
-plt.show()
-# plt.clf()
+plt.savefig('gfx/pca/Scaled_pca_Industry_hist.png')
+plt.clf()
 
 # Correlation
 
 print("\nCorrelation\n")
-print(minmax_scaled.corr(method='pearson'))
+print(s1.corr(method='pearson'))
 
-# #Bar charts
-# for cat in cat_names:
-#     for name in scl_names:
-#         plt.bar(minmax_scaled[cat], minmax_scaled[name])
-#         plt.title(f'{cat}/{name}')
-#         plt.xticks(rotation=90)
-#         plt.savefig(f'gfx/bar/MinMax_{cat}_{name}.png')
-#         plt.clf()
+#Bar charts
+for cat in cat_names:
+    for name in scl_names:
+        plt.bar(minmax_scaled[cat], minmax_scaled[name])
+        plt.title(f'{cat}/{name}')
+        plt.xticks(rotation=90)
+        plt.savefig(f'gfx/bar/MinMax_{cat}_{name}.png')
+        plt.clf()
 
-# for cat in cat_names:
-#     for name in scl_names:
-#         plt.bar(std_scaled[cat], std_scaled[name])
-#         plt.title(f'{cat}/{name}')
-#         plt.xticks(rotation=90)
-#         plt.savefig(f'gfx/bar/Scaled_{cat}_{name}.png')
-#         plt.clf()
+for cat in cat_names:
+    for name in scl_names:
+        plt.bar(std_scaled[cat], std_scaled[name])
+        plt.title(f'{cat}/{name}')
+        plt.xticks(rotation=90)
+        plt.savefig(f'gfx/bar/Scaled_{cat}_{name}.png')
+        plt.clf()
 
-# #Scatter charts
-# for cat in scl_names:
-#     for name in scl_names:
-#         plt.scatter(s1[cat], s1[name])
-#         plt.title(f'{cat}/{name}')
-#         plt.xticks(rotation=90)
-#         plt.savefig(f'gfx/scatter/General_{cat}_{name}.png')
-#         plt.clf()
+#Scatter charts
+for cat in scl_names:
+    for name in scl_names:
+        plt.scatter(s1[cat], s1[name])
+        plt.title(f'{cat}/{name}')
+        plt.xticks(rotation=90)
+        plt.savefig(f'gfx/scatter/General_{cat}_{name}.png')
+        plt.clf()
 
-# #Frequency charts
-# for cat in cat_names:
-#     plt.bar(s1[cat].value_counts().index, s1[cat].value_counts())
-#     plt.title(f'{cat} frequency')
-#     plt.xticks(rotation=90)
-#     plt.savefig(f'gfx/frequency/General_{cat}.png')
-#     plt.clf()
+#Frequency charts
+for cat in cat_names:
+    plt.bar(s1[cat].value_counts().index, s1[cat].value_counts())
+    plt.title(f'{cat} frequency')
+    plt.xticks(rotation=90)
+    plt.savefig(f'gfx/frequency/General_{cat}.png')
+    plt.clf()
 
-# #Colorful scatter
-
-
-# df_scaled['Growth'].plot()
