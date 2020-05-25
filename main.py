@@ -17,9 +17,9 @@ data = pd.read_csv("Future-500-17.csv")
 print("Initial data \n")
 print(data.describe(include='all'))
 
-#Reading hand filled data
+# Reading hand filled data
 data = pd.read_csv("data.csv")
-print(data.describe(include='all'))
+print("Hand-filled data \n")
 print(data.describe(include='all'))
 
 # Converting to categorical data
@@ -35,6 +35,7 @@ data['Expenses'] = data['Expenses'].str.replace("Dollars", "")
 data['Expenses'] = data['Expenses'].str.replace(",", "")
 data['Expenses'] = pd.to_numeric(
     data['Expenses'], errors='coerce', downcast='float')
+
 # Cleaning Revenue
 data['Revenue'] = data['Revenue'].str.replace("$", "")
 data['Revenue'] = data['Revenue'].str.replace(",", "")
@@ -153,9 +154,11 @@ x = StandardScaler().fit_transform(x)  # normalizing the features
 act_data = s1[["Revenue", "Expenses", "Profit", "Growth", "Employees"]]
 mapper = DataFrameMapper([(act_data.columns, StandardScaler())])
 scaled_features = mapper.fit_transform(act_data.copy(), 4)
-scaled_features_df = pd.DataFrame(scaled_features, index=act_data.index, columns=act_data.columns)
+scaled_features_df = pd.DataFrame(
+    scaled_features, index=act_data.index, columns=act_data.columns)
 std_scaled = s1.copy()
-std_scaled[["Revenue", "Expenses", "Profit", "Growth", "Employees"]] = scaled_features_df[["Revenue", "Expenses", "Profit", "Growth", "Employees"]]
+std_scaled[["Revenue", "Expenses", "Profit", "Growth", "Employees"]
+           ] = scaled_features_df[["Revenue", "Expenses", "Profit", "Growth", "Employees"]]
 
 print("\nStandard scaled\n")
 print(std_scaled.describe())
@@ -166,7 +169,7 @@ principalComponents = pca.fit_transform(x)
 principal_Df = pd.DataFrame(data=principalComponents, columns=['Dim1', 'Dim2'])
 principal_Df['Industry'] = std_scaled['Industry']
 # sns.pairplot(x_vars=["Dim1"], y_vars=["Dim2"], data=principal_Df, hue="Industry")
-#plt.savefig('gfx/pca/Scaled_pca_Industry.png')
+# plt.savefig('gfx/pca/Scaled_pca_Industry.png')
 plt.title('PCA')
 plt.hist2d(principal_Df['Dim1'], principal_Df['Dim2'])
 plt.colorbar()
