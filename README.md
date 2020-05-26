@@ -229,49 +229,50 @@ ir gauti rezultatai:
 
 #### Darbuotojų kiekis pagal Industry ir State 
 
-![foo](/gfx/frequency/General_Industry.png)
-![foo](/gfx/frequency/General_State.png)
+![foo](\gfx\frequency/General_Industry.png)  
+![foo](\gfx\frequency/General_State.png)
 
 Šiuose grafikuose galime matyt, jog daugiausiai Employees yra IT Services Industry ir CA State, tai yra tikriausiai dėl Silicon valley.
 
 #### Kiekybinių priklausomybė
-![foo](/gfx/scatter/General_Profit_Employees.png)
+![foo](\gfx\scatter/General_Profit_Employees.png)
 
 Iš šio grafiko galime matyti, jog Profit nepriklauso nuo Employees, nes net ir nedaug darbuotojų turinčios įmonės turi aukštą profit.
 
-![foo](/gfx/scatter/General_Revenue_Profit.png)
+![foo](\gfx\scatter/General_Revenue_Profit.png)
 
-Iš šio grafiko galime matyti, jog Profit yra susiję su Revenue -  kuo didesnė apyvartą tuo didesnis ir pelnas
+Iš šio grafiko galime matyti, jog Profit yra susiję su Revenue -  kuo didesnė apyvartą tuo didesnis ir pelnas.
 
 ### Min-Max normuoti grafikai
 
 #### Pagal Industry
 
-![foo](/gfx/bar/MinMax_Industry_Employees.png)
+![foo](\gfx\bar/MinMax_Industry_Employees.png)
 
-Matome kad industrijos Employees maksimumus yra pakankamai panašus.
+Matome kad industrijos Employees maksimumai yra pakankamai panašus.
 
-![foo](/gfx/bar/MinMax_Industry_Profit.png)
-![foo](/gfx/bar/MinMax_Industry_Revenue.png)
+![foo](\gfx\bar/MinMax_Industry_Profit.png)  
+![foo](\gfx\bar/MinMax_Industry_Revenue.png)
 
-Industry Profit ir Revenue maksimumus dominuoja IT Services.
+Industry Profit ir Revenue maksimumus dominuoja IT Services. O blogiausiai pasirodo Health ir Government Services.
 
 #### Pagal State
 
-![foo](\gfx\bar\MinMax_State_Expenses.png)
+![foo](\gfx\bar/MinMax_State_Expenses.png)
 
-Matome kad State Expenses maksimumus yra stipriai mažesnis WV ir NV State, kas reiškia, kad ten pigiausia kurti įmonę.
+Matome kad State Expenses maksimumus yra stipriai mažesnis WV (~0.2) ir NV (~0.2) State, kas reiškia, kad ten pigiausia kurti įmonę.
 
 ### Vidurkiu ir dispersija normuoti grafikai
 
 #### Pagal Industry
 
-![foo](\gfx\bar\Scaled_Industry_Growth.png)
+![foo](\gfx\bar/Scaled_Industry_Growth.png)
 
-Growth yra didžiausias IT services, o mažiausias Government service.
+Growth yra didžiausias IT services (>2), o mažiausias Government services (<-2).
 
 #### Pagal State
-Nenagrinėjama, nes per mažai duomenų, kad vidurkis būtų indikatorius.
+
+Nenagrinėjama, nes per mažai duomenų, kad vidurkis būtų tinkamas indikatorius.
 
 ## PCA ir MDS algoritmas
 
@@ -285,12 +286,14 @@ principal_Df = pd.DataFrame(data=principalComponents, columns=['Dim1', 'Dim2'])
 principal_Df['Industry'] = std_scaled['Industry']
 sns.pairplot(x_vars=["Dim1"], y_vars=["Dim2"], data=principal_Df, hue="Industry")
 ```
+![foo](\gfx\pca/Scaled_pca_Industry.png)
 
-Gautas grafikai pagal industrijas rodo pakankamai matomus klasterius
+Pagal taškine diagramą galime matyti, jog vienoje plokštumos pusėje yra IT Services ir Financial Sector, o kitoje Government Services ir Health. Pagal tai galime teigti, kad šios dvi grupės skiriasi pagal nagrinėjamus rodiklius.
 
-![foo](/gfx/pca/Scaled_pca_Industry.png)
+![foo](\gfx\pca/Scaled_pca_Industry_hist.png)
 
-![foo](/gfx/pca/Scaled_pca_Industry_hist.png)
+Pagal šią diagramą galime matyti kad turime du klasterius, tačiau jie nėra toli vienas nuo kito, pagal ką galime teigti, jog vidutiniškai rodikliai yra panašus (nėra kategoriškai besiskiriantys)
+
 
 ## Koreliacija
 
@@ -308,18 +311,18 @@ data.corr(method='pearson')
 | Profit    | -0.052620 | 0.835522  | -0.576776 | 1.000000  | 0.502986  |
 | Growth    | -0.083790 | 0.448901  | -0.250309 | 0.502986  | 1.000000  |
 
-Matome, kad Revenue ir Profit tikrai stipriai susiję teigiamai. Taip pat matome, kad Profit ir Expenses susiję neigiamai. 
+Iš lentelės matome, kad Revenue ir Profit tikrai stipriai susiję teigiamai (0.835522). Taip pat matome, kad Profit ir Expenses susiję neigiamai (-0.576776). Iš ko galime spręsti, jog norint pasiekti didžiausia Profit turime turėti kuo didesne Revenue ir kuo mažesnius Expenses.   
 
 ## Išvados
 
 Darbo eigoje gaunant tarpinius rezultatus paaiškėjo tam tikri dalykai apie nagrinėjamą duomenų aibę:
 
-1. Duomenis valymu pašalinama 41 eilutė.
-2. Reikia papildomos analizės dėl darbuotojų kiekio išorinio barjero.
-3. Daugiausiai Employees yra IT Services Industry ir CA State.
-4. Profit nepriklauso nuo Employees, nes net ir nedaug darbuotojų turinčios įmonės turi aukštą pelną.
-5. Profit yra stipriai susijęs su Revenue -  kuo didesnė apyvartą tuo didesnis ir pelnas.
-6. Industry Profit ir Revenue maksimumus dominuoja IT Services.
-7. Matome kad industrijos Employees kiekių viršūnės yra panašios.
-8. WV ir NV State įsteigtos įmonės turi mažiausius Expenses.
-9. Norint turėti aukšta pelną reikia didelės apyvartos ir mažų išlaidų ir tam geriausiai tinka IT service industrija didžiausiam Revenue ir WV arba NV State mažiausiems kaštas.
+1. Reikia papildomos analizės dėl darbuotojų kiekio išorinio barjero, kadangi nagrinėjamos didžiausios įmonės.
+2. Pagal Dažnio diagramas matome, jog daugiausiai Employees yra IT Services Industry ir CA State.
+3. Profit nepriklauso nuo Employees, nes net ir nedaug darbuotojų turinčios įmonės turi aukštą pelną.
+4. Profit yra stipriai susijęs su Revenue - kuo didesnė apyvartą tuo didesnis ir pelnas. Šiuos duomenys galime matyti pagal taškinės diagramos tendencijas ir pagal koreliacijos lentelę.
+5. Pagal Min-Max normuotų duomenų stulpelinę diagramą matome, jog Profit ir Revenue maksimumus dominuoja IT Services Industry.
+6. Pagal normuotų duomenų stulpelinę diagramą matome, kad Industry Employees kiekių viršūnės yra panašios - įmonės vidutiniškai turi vienodus kiekius darbuotojų.
+7. Pagal stulpelinę diagramą matome WV ir NV State įsteigtos įmonės turi mažiausius Expenses.
+8. Norint turėti aukšta pelną reikia didelės apyvartos ir mažų išlaidų ir tam geriausiai tinka IT service industrija didžiausiam Revenue ir WV arba NV State mažiausiems kaštas.
+9. Iš PCA diagramos matome, jog IT Services ir Financial Financial Sector sudaro grupę ir Government Services ir Health sudaro kitą grupę. Kadangi žinome, jog didžiausia pelną turi IT Services, o mažiausią augimą Government Services, galime daryti išvadas, jog Financial Sector taip pat yra daugiau pelningas, o Health mažiau pelningas.
