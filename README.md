@@ -229,17 +229,17 @@ ir gauti rezultatai:
 
 #### Darbuotojų kiekis pagal Industry ir State 
 
-![foo](\gfx\frequency/General_Industry.png)  
-![foo](\gfx\frequency/General_State.png)
+![foo](/gfx/frequency/General_Industry.png)  
+![foo](/gfx/frequency/General_State.png)
 
 Šiuose grafikuose galime matyt, jog daugiausiai Employees yra IT Services Industry ir CA State, tai yra tikriausiai dėl Silicon valley.
 
 #### Kiekybinių priklausomybė
-![foo](\gfx\scatter/General_Profit_Employees.png)
+![foo](/gfx/scatter/General_Profit_Employees.png)
 
 Iš šio grafiko galime matyti, jog Profit nepriklauso nuo Employees, nes net ir nedaug darbuotojų turinčios įmonės turi aukštą profit.
 
-![foo](\gfx\scatter/General_Revenue_Profit.png)
+![foo](/gfx/scatter/General_Revenue_Profit.png)
 
 Iš šio grafiko galime matyti, jog Profit yra susiję su Revenue -  kuo didesnė apyvartą tuo didesnis ir pelnas.
 
@@ -247,18 +247,18 @@ Iš šio grafiko galime matyti, jog Profit yra susiję su Revenue -  kuo didesn�
 
 #### Pagal Industry
 
-![foo](\gfx\bar/MinMax_Industry_Employees.png)
+![foo](/gfx/bar/MinMax_Industry_Employees.png)
 
 Matome kad industrijos Employees maksimumai yra pakankamai panašus.
 
-![foo](\gfx\bar/MinMax_Industry_Profit.png)  
-![foo](\gfx\bar/MinMax_Industry_Revenue.png)
+![foo](/gfx/bar/MinMax_Industry_Profit.png)  
+![foo](/gfx/bar/MinMax_Industry_Revenue.png)
 
 Industry Profit ir Revenue maksimumus dominuoja IT Services. O blogiausiai pasirodo Health ir Government Services.
 
 #### Pagal State
 
-![foo](\gfx\bar/MinMax_State_Expenses.png)
+![foo](/gfx/bar/MinMax_State_Expenses.png)
 
 Matome kad State Expenses maksimumus yra stipriai mažesnis WV (~0.2) ir NV (~0.2) State, kas reiškia, kad ten pigiausia kurti įmonę.
 
@@ -266,7 +266,7 @@ Matome kad State Expenses maksimumus yra stipriai mažesnis WV (~0.2) ir NV (~0.
 
 #### Pagal Industry
 
-![foo](\gfx\bar/Scaled_Industry_Growth.png)
+![foo](/gfx/bar/Scaled_Industry_Growth.png)
 
 Growth yra didžiausias IT services (>2), o mažiausias Government services (<-2).
 
@@ -286,11 +286,11 @@ principal_Df = pd.DataFrame(data=principalComponents, columns=['Dim1', 'Dim2'])
 principal_Df['Industry'] = std_scaled['Industry']
 sns.pairplot(x_vars=["Dim1"], y_vars=["Dim2"], data=principal_Df, hue="Industry")
 ```
-![foo](\gfx\pca/Scaled_pca_Industry.png)
+![foo](/gfx/pca/Scaled_pca_Industry.png)
 
 Pagal taškine diagramą galime matyti, jog vienoje plokštumos pusėje yra IT Services ir Financial Sector, o kitoje Government Services ir Health. Pagal tai galime teigti, kad šios dvi grupės skiriasi pagal nagrinėjamus rodiklius.
 
-![foo](\gfx\pca/Scaled_pca_Industry_hist.png)
+![foo](/gfx/pca/Scaled_pca_Industry_hist.png)
 
 Pagal šią diagramą galime matyti kad turime du klasterius, tačiau jie nėra toli vienas nuo kito, pagal ką galime teigti, jog vidutiniškai rodikliai yra panašus (nėra kategoriškai besiskiriantys)
 
